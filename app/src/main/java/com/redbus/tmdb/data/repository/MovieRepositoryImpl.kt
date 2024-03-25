@@ -4,6 +4,7 @@ import com.redbus.tmdb.data.repository.dataSource.MovieRemoteDataSource
 import com.redbus.tmdb.domain.model.MovieList
 import com.redbus.tmdb.domain.repository.MovieRepository
 import retrofit2.Response
+import com.redbus.tmdb.domain.util.Result
 
 class MovieRepositoryImpl (private val movieRemoteDataSource: MovieRemoteDataSource) :
     MovieRepository {
@@ -12,9 +13,9 @@ class MovieRepositoryImpl (private val movieRemoteDataSource: MovieRemoteDataSou
     private fun responseToRequest(response: Response<MovieList>):Result<MovieList>{
         if(response.isSuccessful){
             response.body()?.let {result->
-                return Result.success(result)
+                return Result.Success(result)
             }
         }
-        return Result.failure(Throwable(response.errorBody().toString()))
+        return Result.Error(response.message())
     }
 }

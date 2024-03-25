@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">TMDB</string>
+    <string name="toast_error">There was a problem</string>
 </resources>
