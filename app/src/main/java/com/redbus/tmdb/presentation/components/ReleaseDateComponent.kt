@@ -3,6 +3,8 @@ package com.redbus.tmdb.presentation.components
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -20,7 +22,7 @@ fun ReleaseDateComponent(releaseDate: String) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            painter = painterResource(id = R.drawable.ic_baseline_date_range_24),
+            Icons.Default.DateRange,
             contentDescription = null,
             modifier = Modifier.padding(
                 end = 2.dp,

@@ -14,14 +14,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -42,9 +38,13 @@ import com.redbus.tmdb.presentation.navigation.Screen
 
 
 @Composable
-fun MovieListContent(allMovies: LazyPagingItems<Movie>, navController: NavHostController) {
+fun MovieListContent(
+    allMovies: LazyPagingItems<Movie>,
+    navController: NavHostController,
+    paddingValues: PaddingValues
+) {
     LazyColumn(
-        contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp)
+        contentPadding = paddingValues
     ) {
         items(allMovies.itemCount, itemContent = {
             val movie = allMovies[it]
@@ -55,23 +55,23 @@ fun MovieListContent(allMovies: LazyPagingItems<Movie>, navController: NavHostCo
     }
 
 }
-    @OptIn(ExperimentalMaterial3Api::class)
+
     @Composable
     fun MovieListItem(movie: Movie, navController: NavHostController) {
         Card(
             modifier = Modifier
                 .padding(top = 8.dp)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .clickable { navController.navigate(route = Screen.MovieDetails.passMovieId(movie.movieId.toString())) },
             elevation = CardDefaults.cardElevation(),
             colors = CardDefaults.cardColors(
                 containerColor = Color.DarkGray
             ),
-            onClick = {navController.navigate(route = Screen.MovieDetails.passMovieId(movie.movieId.toString()))}
 
         ) {
             Row(
                 modifier = Modifier
-                    .height(IntrinsicSize.Max)
+                    .height(150.dp)
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
