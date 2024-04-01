@@ -1,5 +1,6 @@
 package com.redbus.tmdb.di
 
+import com.redbus.tmdb.data.db.BookmarksDao
 import com.redbus.tmdb.data.db.MovieDao
 import com.redbus.tmdb.data.repository.dataSource.MovieLocalDataSource
 import com.redbus.tmdb.data.repository.dataSourceImpl.MovieLocalDataSourceImpl
@@ -12,6 +13,6 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 object LocalDataModule {
     @Provides
-    fun provideLocalDataSource(movieDao: MovieDao): MovieLocalDataSource =
-        MovieLocalDataSourceImpl(movieDao = movieDao)
+    fun provideLocalDataSource(movieDao: MovieDao,bookmarksDao: BookmarksDao): MovieLocalDataSource =
+        MovieLocalDataSourceImpl(movieDao = movieDao, bookmarksDao = bookmarksDao)
 }

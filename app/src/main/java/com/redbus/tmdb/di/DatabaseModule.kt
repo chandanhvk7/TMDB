@@ -2,6 +2,7 @@ package com.redbus.tmdb.di
 
 import android.app.Application
 import androidx.room.Room
+import com.redbus.tmdb.data.db.BookmarksDao
 import com.redbus.tmdb.data.db.MovieDB
 import com.redbus.tmdb.data.db.MovieDao
 import com.redbus.tmdb.data.db.MovieRemoteKeysDao
@@ -16,7 +17,7 @@ object DatabaseModule {
 
     @Provides
     fun provideDatabase(app: Application): MovieDB =
-        Room.databaseBuilder(app, MovieDB::class.java, "movie_db").fallbackToDestructiveMigration()
+        Room.databaseBuilder(app, MovieDB::class.java, "movie_db").fallbackToDestructiveMigration().allowMainThreadQueries()
             .build()
 
     @Provides
@@ -24,4 +25,7 @@ object DatabaseModule {
 
     @Provides
     fun provideMovieRemoteKeysDao(movieDB: MovieDB) : MovieRemoteKeysDao = movieDB.movieRemoteKeysDao()
+
+    @Provides
+    fun provideBookmarksDao(movieDB: MovieDB):BookmarksDao=movieDB.bookmarksDao()
 }

@@ -3,14 +3,10 @@ package com.redbus.tmdb.domain.model
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
-import java.io.Serializable
 
-
-@Entity(tableName = "movies")
-data class Movie(
-    @PrimaryKey(autoGenerate = true)
-    var pk: Long = 0,
-    @SerializedName("id")
+@Entity(tableName = "bookmarked_movies")
+data class BookmarkedMovie(
+    @PrimaryKey
     val movieId: Int,
     @SerializedName("overview")
     val overview: String?,
@@ -23,5 +19,5 @@ data class Movie(
     @SerializedName("release_date")
     val releaseDate: String?,
     @SerializedName("backdrop_path")
-    val backDrop:String?,
-) : Serializable
+    val backdropPath: String?
+)

@@ -25,10 +25,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.paging.compose.LazyPagingItems
+import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
+import coil.request.ImageRequest
 import coil.size.Scale
 import com.redbus.tmdb.BuildConfig
 import com.redbus.tmdb.domain.model.Movie
@@ -71,7 +74,7 @@ fun MovieListContent(
         ) {
             Row(
                 modifier = Modifier
-                    .height(150.dp)
+                    .height(200.dp)
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -81,12 +84,14 @@ fun MovieListContent(
                             .padding(
                                 end = 4.dp,
                             )
-                            .width(120.dp),
-                        painter = rememberImagePainter(
-                            data = BuildConfig.POSTER_URL + movie.posterPath, builder = {
-                                crossfade(true)
-                                scale(Scale.FILL)
-                            }),
+                            .width(150.dp),
+                        painter = rememberAsyncImagePainter(
+                            ImageRequest.Builder(LocalContext.current)
+                                .data(data = BuildConfig.POSTER_URL + movie.posterPath).apply(block = fun ImageRequest.Builder.() {
+                                    crossfade(true)
+                                    scale(Scale.FILL)
+                                }).build()
+                        ),
                         contentDescription = null,
                         contentScale = ContentScale.Crop
                     )
@@ -98,15 +103,6 @@ fun MovieListContent(
                             style = MaterialTheme.typography.headlineMedium
                         )
                     }
-//                Spacer(modifier = Modifier.height(4.dp))
-//                movie.overview?.let {
-//                    Text(
-//                        text = it,
-//                        style = MaterialTheme.typography.bodyMedium,
-//                        maxLines = 3,
-//                        overflow = TextOverflow.Ellipsis
-//                    )
-//                }
                     Spacer(modifier = Modifier.height(8.dp))
                     Row(
                         modifier = Modifier.fillMaxWidth(),

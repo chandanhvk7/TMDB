@@ -6,6 +6,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.redbus.tmdb.presentation.screens.FavoritesScreen
 
 import com.redbus.tmdb.presentation.screens.HomeScreen
 import com.redbus.tmdb.presentation.screens.MovieDetailsScreen
@@ -26,6 +27,9 @@ fun NavGraph(navController: NavHostController) {
         ){
             it.arguments?.getString("movieId")
                 ?.let { it1 -> MovieDetailsScreen(navController = navController, movieId = it1) }
+        }
+        composable(route=Screen.Favorites.route){
+            FavoritesScreen(navController = navController)
         }
     }
 }

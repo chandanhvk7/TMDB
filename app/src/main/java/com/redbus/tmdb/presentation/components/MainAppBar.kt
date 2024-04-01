@@ -18,9 +18,9 @@ import com.redbus.tmdb.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainAppBar(isList: Boolean, onLayoutChangeRequested: () -> Unit){
+fun MainAppBar(string: String,isList: Boolean, onLayoutChangeRequested: () -> Unit){
     TopAppBar(
-        title = { Text(text = stringResource(R.string.app_name))},
+        title = { Text(text = string)},
         actions = {
             IconButton(onClick = {
                 onLayoutChangeRequested()

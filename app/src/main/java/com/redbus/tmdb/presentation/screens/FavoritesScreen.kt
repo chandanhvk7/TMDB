@@ -1,6 +1,5 @@
 package com.redbus.tmdb.presentation.screens
 
-import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -11,7 +10,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -23,27 +21,26 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.redbus.tmdb.presentation.components.BookmarkGrid
+import com.redbus.tmdb.presentation.components.BookmarkList
 import com.redbus.tmdb.presentation.components.MainAppBar
-
 import com.redbus.tmdb.presentation.components.MovieGridItem
-import com.redbus.tmdb.presentation.viewmodels.HomeViewModel
 import com.redbus.tmdb.presentation.components.MovieListContent
 import com.redbus.tmdb.presentation.navigation.Screen
+import com.redbus.tmdb.presentation.viewmodels.HomeViewModel
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = hiltViewModel()) {
+fun FavoritesScreen(navController: NavHostController, viewModel: HomeViewModel = hiltViewModel()) {
 
-    val allMovies = viewModel.getAllPopularMovies.collectAsLazyPagingItems()
+    val allMovies = viewModel.getBookmarkedMovies.collectAsStateWithLifecycle(null)
     var isListView by rememberSaveable { mutableStateOf(true) }
-
 
     Scaffold(
         topBar = {
-            MainAppBar("Home",isList = isListView, onLayoutChangeRequested = {isListView=!isListView})
+            MainAppBar("Favorites",isList = isListView, onLayoutChangeRequested = {isListView=!isListView})
         },
         content = {padding->
 
@@ -51,16 +48,16 @@ fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = hilt
                 enter = fadeIn(), exit = fadeOut()
             ) {
                 LazyVerticalGrid(columns = GridCells.Fixed(2), contentPadding = padding) {
-                    items(allMovies.itemCount, itemContent = {
-                        val movie=allMovies[it]
-                        if(movie!=null){
-                            MovieGridItem(movie, navController = navController )
-                        }
-                    })
+                    allMovies.value?.let {
+                        items(it.count(), itemContent = {
+                            val movie = allMovies.value!![it]
+                            BookmarkGrid(movie, navController = navController)
+                        })
+                    }
                 }
             }
             AnimatedVisibility(visible = isListView, enter = fadeIn(), exit = fadeOut()) {
-                MovieListContent(allMovies,navController,padding)
+                BookmarkList(allMovies,navController,padding)
             }
         },
         bottomBar = {
@@ -75,10 +72,10 @@ fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = hilt
                 IconButton(onClick = {
                     navController.navigate(Screen.Favorites.route)
                 }) {
-                    Icon(Icons.Filled.Favorite, contentDescription = "Favorites")
+                    Icon(
+                        Icons.Filled.Favorite, contentDescription = "Favorites")
                 }
             }
         }
     )
 }
-
